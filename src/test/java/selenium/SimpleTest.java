@@ -23,16 +23,66 @@ public class SimpleTest {
   }
 
   @Test
-  public void testSimple() throws Exception {
-    driver.get(baseUrl + "login");
-    driver.findElement(By.id("login")).clear();
-    driver.findElement(By.id("login")).sendKeys("admin");
-    driver.findElement(By.id("password")).clear();
-    driver.findElement(By.id("password")).sendKeys("password");
-    driver.findElement(By.name("commit")).click();
-    assertEquals("Admin", driver.findElement(By.id("admin")).getText());
-    driver.findElement(By.linkText("Logout")).click();
+  public void shouldLoginAsAdminWithAppropriateCredentials() throws Exception {
+	//given
+	openLoginPage();
+	
+	//when
+    loginWithCorrectAdminCredentials();
+    
+    //then
+    assertThatYouAreLoggedInAsAdmin();
+    logout();
   }
+  
+  @Test
+  public void shouldNotLoginWithNotAppropriateCredentials() throws Exception {
+		//given
+		openLoginPage();
+		
+		//when
+	    loginWithNotCorrectCredentials();
+	    
+	    //then
+	    assertThatYouAreNotLoggedInProperly();
+	  }
+
+  private void assertThatYouAreLoggedInAsAdmin() {
+		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
+	}
+  
+  private void assertThatYouAreNotLoggedInProperly() {
+		assertEquals("Login failed", driver.findElement(By.id("flash")).getText());
+	}
+
+private void openLoginPage() {
+	driver.get(baseUrl + "login");
+}
+
+private void logout() {
+	clickElement(By.linkText("Logout"));
+}
+
+private void loginWithCorrectAdminCredentials() {
+	typeTextIntoAField("admin", By.id("login"));
+	typeTextIntoAField("password", By.id("password"));
+    clickElement(By.name("commit"));
+}
+
+private void loginWithNotCorrectCredentials() {
+	typeTextIntoAField("asdfahsdgfkjas", By.id("login"));
+	typeTextIntoAField("password", By.id("password"));
+    clickElement(By.name("commit"));
+}
+
+private void clickElement(By locator) {
+	driver.findElement(locator).click();
+}
+
+private void typeTextIntoAField(String text, By locator) {
+	driver.findElement(locator).clear();
+    driver.findElement(locator).sendKeys(text);
+}
 
   @After
   public void tearDown() throws Exception {
