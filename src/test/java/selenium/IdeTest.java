@@ -1,14 +1,26 @@
 package selenium;
 
-import java.util.regex.Pattern;
-import java.util.concurrent.TimeUnit;
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.util.concurrent.TimeUnit;
+
+import junitparams.JUnitParamsRunner;
+import static junitparams.JUnitParamsRunner.$;
+import junitparams.Parameters;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+@RunWith(JUnitParamsRunner.class)
 public class IdeTest {
 	private WebDriver driver;
 	private String baseUrl;
@@ -28,25 +40,36 @@ public class IdeTest {
 		correctLoginWithAdminCredentials();
 		assertThatYouAreLogedIn();
 	}
-	
+
 	@Test
-	public void shouldNotBePossibleToLoginWithWrongCredentials() throws Exception {
+	//@Parameters({ "admin, dup1234", "admin1, password" })
+	@Parameters(method="loginValues")
+	public void shouldNotBePossibleToLoginWithWrongCredentials(String login,
+			String password) throws Exception {
 		openLoginPage();
-		incorrectLoginWithAdminCredentials();
+		incorrectLoginWithAdminCredentials(login, password);
 		assertThatYouAreNotLogedIn();
 	}
 
-	private void incorrectLoginWithAdminCredentials() {
-		typeTextIntoAField("admin", By.id("login"));
-		typeTextIntoAField("dupa1234", By.id("password"));
+	private void incorrectLoginWithAdminCredentials(String login,
+			String password) {
+		typeTextIntoAField(login, By.id("login"));
+		typeTextIntoAField(password, By.id("password"));
 		clickElement(By.name("commit"));
-		
+
+	}
+	
+	private Object loginValues(){
+		return $(
+				$("admin","test"),
+				$("admin","dupa1224"),
+				$("admin",""));
 	}
 
 	private void assertThatYouAreLogedIn() {
 		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
 	}
-	
+
 	private void assertThatYouAreNotLogedIn() {
 		assertEquals(true, driver.findElement(By.name("commit")).isDisplayed());
 	}
