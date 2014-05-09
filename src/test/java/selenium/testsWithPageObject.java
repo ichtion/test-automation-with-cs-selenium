@@ -66,28 +66,6 @@ public class testsWithPageObject {
 		
 	}
 
-	public void assertThatYouLoggedInProperly() {
-		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
-	}
-	
-	public void assertThatYouNotLoggedInProperly() {
-		assertEquals("Login failed", driver.findElement(By.id("flash")).getText());
-	}
-
-	public void openLoginPage() {
-		driver.get(baseUrl + "login");
-	}
-
-	public void provideCredentialsAndCommit(String login, String password) {
-		typeTextIntoAField(login, By.id("login"));
-		typeTextIntoAField(password, By.id("password"));
-		driver.findElement(By.name("commit")).click();
-	}
-
-	public void typeTextIntoAField(String text, By location) {
-		driver.findElement(location).clear();
-		driver.findElement(location).sendKeys(text);
-	}
 
 	@After
 	public void tearDown() throws Exception {
@@ -95,39 +73,6 @@ public class testsWithPageObject {
 		String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
 			fail(verificationErrorString);
-		}
-	}
-
-	private boolean isElementPresent(By by) {
-		try {
-			driver.findElement(by);
-			return true;
-		} catch (NoSuchElementException e) {
-			return false;
-		}
-	}
-
-	private boolean isAlertPresent() {
-		try {
-			driver.switchTo().alert();
-			return true;
-		} catch (NoAlertPresentException e) {
-			return false;
-		}
-	}
-
-	private String closeAlertAndGetItsText() {
-		try {
-			Alert alert = driver.switchTo().alert();
-			String alertText = alert.getText();
-			if (acceptNextAlert) {
-				alert.accept();
-			} else {
-				alert.dismiss();
-			}
-			return alertText;
-		} finally {
-			acceptNextAlert = true;
 		}
 	}
 }
