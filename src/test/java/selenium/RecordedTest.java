@@ -1,13 +1,17 @@
 package selenium;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
 
+import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -15,6 +19,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.openqa.selenium.By.id;
 
+@RunWith(JUnitParamsRunner.class)
 public class RecordedTest {
     private WebDriver driver;
     private String baseUrl;
@@ -40,13 +45,22 @@ public class RecordedTest {
         assertThatYouAreLoggedInAsAdmin();
     }
 
+
+    private Object[] invalidCredentials() {
+        return $(
+                $("admin", ""),
+                $("Admin", "password"),
+                $(new String(), new String())
+        );
+    }
     @Test
-    public void shouldNotLoginWithIncorrectAdminCredentials() {
+    @Parameters(method = "invalidCredentials")
+    public void shouldNotLoginWithIncorrectAdminCredentials(String userName, String password) {
         //given
         openLoginPage();
 
         //when
-        loginWithIncorrectAdminCredentials();
+        loginWithIncorrectAdminCredentials(userName, password);
 
         //then
         assertThatLoginFailed();
@@ -61,9 +75,9 @@ public class RecordedTest {
         assertThat(isElementPresent(id("admin")), is(equalTo(false)));
     }
 
-    private void loginWithIncorrectAdminCredentials() {
-        typeTextIntoAField("admin", id("login"));
-        typeTextIntoAField("incorrectPassword", id("password"));
+    private void loginWithIncorrectAdminCredentials(String userName, String password) {
+        typeTextIntoAField(userName, id("login"));
+        typeTextIntoAField(password, id("password"));
         clickElement(By.name("commit"));
     }
 
