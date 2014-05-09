@@ -1,5 +1,8 @@
 package selenium;
 
+import static org.junit.Assert.assertEquals;
+import junitparams.Parameters;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -26,4 +29,17 @@ public class LoginPage extends Page {
 		driver.findElement(location).clear();
 		driver.findElement(location).sendKeys(text);
 	}
+	
+	public LoginPage loginWithInorrectCredentials(String login, String password) {
+		typeTextIntoAField(login, By.id("login"));
+		typeTextIntoAField(password, By.id("password"));
+		driver.findElement(By.name("commit")).click();
+		return this;
+	}
+
+	public boolean notLoggedIn() {
+		
+		return (driver.findElement(By.id("flash")).getText() == "Login failed");		
+	}
+
 }

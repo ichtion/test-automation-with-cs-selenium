@@ -46,6 +46,25 @@ public class testsWithPageObject {
 		// then
 		backlogPage.loggedIn();
 	}
+	
+	@Test
+	@Parameters({ "Admin, password", "admin, bad_password",
+		"bad_login, password", })
+	public void shouldNotLoginWithIncorrectCredentials(String login,
+			String password) {
+		
+		//given
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.openLoginPage();
+
+		// when
+		
+		loginPage = loginPage.loginWithInorrectCredentials(login, password);
+
+		// then
+		loginPage.notLoggedIn();
+		
+	}
 
 //	public void shouldLoginAsAdmin() throws Exception {
 //		// given
