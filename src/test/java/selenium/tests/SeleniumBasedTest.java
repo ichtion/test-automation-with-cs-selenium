@@ -1,25 +1,31 @@
 package selenium.tests;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class SeleniumBasedTest {
-    protected static WebDriver driver;
+import static org.openqa.selenium.remote.DesiredCapabilities.*;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        driver = new FirefoxDriver();
+public class SeleniumBasedTest {
+
+    protected WebDriver driver;
+    protected ThreadLocal<WebDriver> threadLocalWebDriver = new ThreadLocal<WebDriver>();
+
+    @Before
+    public void setUp() throws Exception {
+//        WebDriver remoteWebDriver = new RemoteWebDriver(new URL("http://localhost:6666/wd/hub"), firefox());
+//        threadLocalWebDriver.set(remoteWebDriver);
+        driver = new RemoteWebDriver(new URL("http://localhost:6666/wd/hub"), firefox());
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         driver.quit();
     }
-
-
 }
