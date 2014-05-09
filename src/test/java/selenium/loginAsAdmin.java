@@ -9,7 +9,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class BananaLoginTest {
+public class loginAsAdmin {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -18,7 +18,7 @@ public class BananaLoginTest {
 	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
-		baseUrl = "https://training.bananascrum.com";
+		baseUrl = "https://training.bananascrum.com/";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
@@ -28,32 +28,30 @@ public class BananaLoginTest {
 		openLoginPage();
 
 		// when
-		loginWithAdminCredentials();
+		provideCredentialsAndCommit();
 
 		// then
-		assertThatYouAreLoggedIn();
-
-		driver.findElement(By.linkText("Logout")).click();
+		assertThatYouLoggedInProperly();
 	}
 
-	private void assertThatYouAreLoggedIn() {
+	public void assertThatYouLoggedInProperly() {
 		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
 	}
 
-	private void assertTextElement(String someText, String inElement) {
-		assertEquals(someText, driver.findElement(By.id(inElement)).getText());
+	public void openLoginPage() {
+		driver.get(baseUrl + "login");
 	}
 
-	private void openLoginPage() {
-		driver.get(baseUrl + "/login");
-	}
-
-	private void loginWithAdminCredentials() {
-		driver.findElement(By.id("login")).clear();
-		driver.findElement(By.id("login")).sendKeys("admin");
+	public void provideCredentialsAndCommit() {
+		typeTextIntoAField();
 		driver.findElement(By.id("password")).clear();
 		driver.findElement(By.id("password")).sendKeys("password");
 		driver.findElement(By.name("commit")).click();
+	}
+
+	public void typeTextIntoAField() {
+		driver.findElement(By.id("login")).clear();
+		driver.findElement(By.id("login")).sendKeys("admin");
 	}
 
 	@After

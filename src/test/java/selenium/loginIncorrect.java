@@ -9,7 +9,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class BananaLoginTest {
+public class loginIncorrect {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -18,7 +18,7 @@ public class BananaLoginTest {
 	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
-		baseUrl = "https://training.bananascrum.com";
+		baseUrl = "https://training.bananascrum.com/";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
@@ -28,32 +28,30 @@ public class BananaLoginTest {
 		openLoginPage();
 
 		// when
-		loginWithAdminCredentials();
+		provideIncorrectCredentialsAndCommit();
 
 		// then
-		assertThatYouAreLoggedIn();
-
-		driver.findElement(By.linkText("Logout")).click();
+		assertThatYouDidNotLoggedIn();
 	}
 
-	private void assertThatYouAreLoggedIn() {
-		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
+	public void assertThatYouDidNotLoggedIn() {
+		assertEquals("Forgot your password? Click here.", driver.findElement(By.id("forgot-password")).getText());
 	}
 
-	private void assertTextElement(String someText, String inElement) {
-		assertEquals(someText, driver.findElement(By.id(inElement)).getText());
+	public void openLoginPage() {
+		driver.get(baseUrl + "login");
 	}
 
-	private void openLoginPage() {
-		driver.get(baseUrl + "/login");
+	public void provideIncorrectCredentialsAndCommit() {
+		typeTextIntoAField();
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("bad_password");
+		driver.findElement(By.name("commit")).click();
 	}
 
-	private void loginWithAdminCredentials() {
+	public void typeTextIntoAField() {
 		driver.findElement(By.id("login")).clear();
 		driver.findElement(By.id("login")).sendKeys("admin");
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("password");
-		driver.findElement(By.name("commit")).click();
 	}
 
 	@After
