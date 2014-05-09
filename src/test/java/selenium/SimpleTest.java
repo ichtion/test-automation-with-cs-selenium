@@ -35,19 +35,27 @@ public class SimpleTest {
 		BacklogPage backlogPage = loginPage.correctLogin();
 		backlogPage.isOpen();
 	}
-
+	
 	@Test
-	public void shouldLoginAsAdminWithAppropriateCredentials() throws Exception {
-		// given
-		openLoginPage();
-
-		// when
-		loginWithCorrectAdminCredentials();
-
-		// then
-		assertThatYouAreLoggedInAsAdmin();
-		logout();
+	public void shouldNotLoginAsAnAdmin() {
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.open();
+		loginPage.incorrectLogin();
+		loginPage.isNotOpen();
 	}
+
+//	@Test
+//	public void shouldLoginAsAdminWithAppropriateCredentials() throws Exception {
+//		// given
+//		openLoginPage();
+//
+//		// when
+//		loginWithCorrectAdminCredentials();
+//
+//		// then
+//		assertThatYouAreLoggedInAsAdmin();
+//		logout();
+//	}
 	
 //	@Test
 //	@Parameters(method = "logonValues")
@@ -62,17 +70,17 @@ public class SimpleTest {
 //				$("", "password"), $("admin", "sdfkagsdk"));
 //	}
 
-	@Test
-	public void shouldNotLoginWithNotAppropriateCredentials() throws Exception {
-		// given
-		openLoginPage();
-
-		// when
-		loginWithNotCorrectCredentials();
-
-		// then
-		assertThatYouAreNotLoggedInProperly();
-	}
+//	@Test
+//	public void shouldNotLoginWithNotAppropriateCredentials() throws Exception {
+//		// given
+//		openLoginPage();
+//
+//		// when
+//		loginWithNotCorrectCredentials();
+//
+//		// then
+//		assertThatYouAreNotLoggedInProperly();
+//	}
 
 	private void assertThatYouAreLoggedInAsAdmin() {
 		assertEquals("Admin", driver.findElement(By.id("admin")).getText());

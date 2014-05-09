@@ -1,6 +1,7 @@
 package selenium;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 
 public class Page {
@@ -19,5 +20,13 @@ public class Page {
 		driver.findElement(locator).clear();
 		driver.findElement(locator).sendKeys(text);
 	}
-
+	
+	protected boolean isElementPresent(By by) {
+		try {
+			driver.findElement(by);
+			return true;
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
 }

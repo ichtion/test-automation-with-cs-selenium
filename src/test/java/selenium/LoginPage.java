@@ -22,4 +22,14 @@ public class LoginPage extends Page {
 		return new BacklogPage(driver);
 	}
 
+	public LoginPage incorrectLogin() {
+		typeTextIntoAField("admin", By.id("login"));
+		typeTextIntoAField("sdfkgjashdful", By.id("password"));
+		clickElement(By.name("commit"));
+		return this;
+	}
+	
+	public boolean isNotOpen() {
+		return isElementPresent(By.id("flash"));
+	}
 }
