@@ -66,17 +66,6 @@ public class testsWithPageObject {
 		
 	}
 
-//	public void shouldLoginAsAdmin() throws Exception {
-//		// given
-//		openLoginPage();
-//
-//		// when
-//		provideCredentialsAndCommit("admin", "password");
-//
-//		// then
-//		assertThatYouLoggedInProperly();
-//	}
-
 	public void assertThatYouLoggedInProperly() {
 		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
 	}
