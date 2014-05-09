@@ -29,7 +29,7 @@ public class LoginPage extends Page {
 		return this;
 	}
 	
-	public boolean isNotOpen() {
-		return isElementPresent(By.id("flash"));
+	public boolean isOpen() {
+		return isElementPresent(By.id("password")) && isElementPresent(By.id("login"));
 	}
 }

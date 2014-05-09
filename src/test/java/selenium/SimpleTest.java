@@ -41,7 +41,7 @@ public class SimpleTest {
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.open();
 		loginPage.incorrectLogin();
-		loginPage.isNotOpen();
+		loginPage.isOpen();
 	}
 
 //	@Test
