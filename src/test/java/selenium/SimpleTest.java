@@ -27,6 +27,14 @@ public class SimpleTest {
 		baseUrl = "https://training.bananascrum.com/";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
+	
+	@Test
+	public void shouldLoginAsAnAdmin() {
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.open();
+		BacklogPage backlogPage = loginPage.correctLogin();
+		backlogPage.isOpen();
+	}
 
 	@Test
 	public void shouldLoginAsAdminWithAppropriateCredentials() throws Exception {
@@ -41,18 +49,18 @@ public class SimpleTest {
 		logout();
 	}
 	
-	@Test
-	@Parameters(method = "logonValues")
-	public void loginCheckouts(String login, String password) throws Exception {
-		openLoginPage();
-		loginWithParameters(login, password);
-		assertThatYouAreNotLoggedInProperly();
-	}
-
-	private Object[] logonValues() {
-		return $($("asdasdasd", "password"), $("", ""), $("admin", ""),
-				$("", "password"), $("admin", "sdfkagsdk"));
-	}
+//	@Test
+//	@Parameters(method = "logonValues")
+//	public void loginCheckouts(String login, String password) throws Exception {
+//		openLoginPage();
+//		loginWithParameters(login, password);
+//		assertThatYouAreNotLoggedInProperly();
+//	}
+//
+//	private Object[] logonValues() {
+//		return $($("asdasdasd", "password"), $("", ""), $("admin", ""),
+//				$("", "password"), $("admin", "sdfkagsdk"));
+//	}
 
 	@Test
 	public void shouldNotLoginWithNotAppropriateCredentials() throws Exception {
