@@ -23,12 +23,15 @@ public class BacklogPageTest extends SeleniumBasedTest {
 
     @Test
     public void shouldBePossibleToAddNewBacklogItem() {
+        //given
         String title = UUID.randomUUID().toString();
         String description = "That is the best story";
-        StoryEstimate estimate = ONE;
 
+        //when
         backlogPage = backlogPage.clickAddItemButton();
-        backlogPage = backlogPage.fillUserStoryDetailsAndClickCreate(title, description, estimate);
+        backlogPage = backlogPage.fillUserStoryDetailsAndClickCreate(title, description);
+
+        //then
         assertThat(backlogPage.isBacklogItemWithTitlePresent(title), is(true));
     }
 

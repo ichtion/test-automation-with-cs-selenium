@@ -18,8 +18,6 @@ public class BacklogPage extends Page {
     private By userStoryDescriptionInputField = By.id("item_description");
     private By createUserStoryButton = By.name("commit");
 
-    private By listOfBacklogItems = By.className("item-user-story");
-
     public BacklogPage(WebDriver driver) {
         super(driver);
     }
@@ -33,7 +31,7 @@ public class BacklogPage extends Page {
         return this;
     }
 
-    public BacklogPage fillUserStoryDetailsAndClickCreate(String title, String description, StoryEstimate estimate) {
+    public BacklogPage fillUserStoryDetailsAndClickCreate(String title, String description) {
         typeTextIntoAField(title, userStoryTitleInputField);
         typeTextIntoAField(description, userStoryDescriptionInputField);
         clickElement(createUserStoryButton);
@@ -41,26 +39,12 @@ public class BacklogPage extends Page {
     }
 
     public boolean isBacklogItemWithTitlePresent(String title) {
-        await().atMost(10, SECONDS).until(itemWithTitleIsPresent(title));
         return isItemWithTitlePresent(title);
     }
 
-    private Callable<Boolean> itemWithTitleIsPresent(final String title) {
-        return new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                return isItemWithTitlePresent(title);
-            }
-        };
-    }
-
     private Boolean isItemWithTitlePresent(String title) {
-        List<WebElement> backlogItems = driver.findElements(listOfBacklogItems);
-        for (WebElement backlogItem : backlogItems) {
-            if (backlogItem.getText().equals(title)) {
-                return true;
-            }
-        }
+        WebElement backlogItem = driver.findElement(By.xpath("//div[text()='" + title + "']"));
+        if (null != backlogItem) return true;
         return false;
     }
 }
