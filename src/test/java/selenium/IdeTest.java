@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import java.util.concurrent.TimeUnit;
 
 import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,82 +24,43 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 @RunWith(JUnitParamsRunner.class)
 public class IdeTest {
 	private WebDriver driver;
-	private String baseUrl;
 	private boolean acceptNextAlert = true;
 	private StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
-		baseUrl = "https://training.bananascrum.com";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void shouldBePossibleToLogin() throws Exception {
-		//given
+	public void shouldBePossibleToLoginWithCorrectAdminCredidentials()
+			throws Exception {
+		// given
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.open();
-		//when
+		// when
 		BacklogPage backlogPage = loginPage.loginWithCorrectAdminCredentials();
-		//then
+		// then
 		assertTrue(backlogPage.isOpen());
 	}
 
-//	@Test
-//	//@Parameters({ "admin, dup1234", "admin1, password" })
-//	@Parameters(method="loginValues")
-//	public void shouldNotBePossibleToLoginWithWrongCredentials(String login,
-//			String password) throws Exception {
-//		openLoginPage();
-//		incorrectLoginWithAdminCredentials(login, password);
-//		assertThatYouAreNotLogedIn();
-//	}
-
-	private void incorrectLoginWithAdminCredentials(String login,
-			String password) {
-		typeTextIntoAField(login, By.id("login"));
-		typeTextIntoAField(password, By.id("password"));
-		clickElement(By.name("commit"));
-
-	}
-	
-	private Object loginValues(){
-		return $(
-				$("admin","test"),
-				$("admin","dupa1224"),
-				$("admin",""));
+	@Test
+	@Parameters(method = "loginValues")
+	public void shouldNotBePossibleToLoginWithWrongCredentials(String login,
+			String password) throws Exception {
+		// given
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.open();
+		// when
+		LoginPage reloadedLoginPage = loginPage.loginWithInCorrectCredentials(
+				login, password);
+		// then
+		assertTrue(reloadedLoginPage.isOpen());
 	}
 
-	private void assertThatYouAreLogedIn() {
-		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
-	}
-
-	private void assertThatYouAreNotLogedIn() {
-		assertEquals(true, driver.findElement(By.name("commit")).isDisplayed());
-	}
-
-	private void openLoginPage() {
-		driver.get(baseUrl + "/login");
-	}
-
-	private void correctLogout() {
-		clickElement(By.linkText("Logout"));
-	}
-
-	private void clickElement(By locator) {
-		driver.findElement(locator).click();
-	}
-
-	private void correctLoginWithAdminCredentials() {
-		typeTextIntoAField("admin", By.id("login"));
-		typeTextIntoAField("password", By.id("password"));
-		clickElement(By.name("commit"));
-	}
-
-	private void typeTextIntoAField(String text, By locator) {
-		driver.findElement(locator).clear();
-		driver.findElement(locator).sendKeys(text);
+	private Object loginValues() {
+		return $($("admin", "test"), $("admin", "dupa1224"), $("admin", ""));
 	}
 
 	@After
@@ -107,15 +69,6 @@ public class IdeTest {
 		String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
 			fail(verificationErrorString);
-		}
-	}
-
-	private boolean isElementPresent(By by) {
-		try {
-			driver.findElement(by);
-			return true;
-		} catch (NoSuchElementException e) {
-			return false;
 		}
 	}
 
