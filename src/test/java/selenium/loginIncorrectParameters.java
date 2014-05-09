@@ -2,14 +2,24 @@ package selenium;
 
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
+
+import junitparams.JUnitParamsRunner;
+import static junitparams.JUnitParamsRunner.$;
+import junitparams.Parameters;
+
 import org.junit.*;
+import org.junit.runner.RunWith;
+
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+@RunWith(JUnitParamsRunner.class)
 
-public class loginIncorrect {
+
+public class loginIncorrectParameters {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -23,12 +33,32 @@ public class loginIncorrect {
 	}
 
 	@Test
-	public void shouldNotLoginAsAdmin() throws Exception {
+	@Parameters({
+		"wrongLogin, worngPassword",
+		"admin, worngPassword",
+		"wrongtLogin, password",
+
+	})
+
+/*	@Parameters(method = "credentialValues")
+	private Object[] credentialValues() {
+        return $(
+                     $("admin", "wrongPassword"),
+                     $("admin", ""),
+                     $("", "password"),
+                     $("admin", "password")
+                );
+    }
+	*/
+	
+	public void shouldNotLoginWhenCredentialIsNotCorrect(String login, String password) throws Exception {
 		// given
 		openLoginPage();
 
 		// when
-		provideIncorrectCredentialsAndCommit();
+		//provideIncorrectCredentialsAndCommitWithParameters();
+		provideIncorrectCredentialsAndCommitWithParameters(login, password);
+		
 
 		// then
 		assertThatYouDidNotLoggedIn();
@@ -42,17 +72,14 @@ public class loginIncorrect {
 		driver.get(baseUrl + "login");
 	}
 
-	public void provideIncorrectCredentialsAndCommit() {
-		typeTextIntoAField();
+	public void provideIncorrectCredentialsAndCommitWithParameters(String login, String password) {
+		driver.findElement(By.id("login")).clear();
+		driver.findElement(By.id("login")).sendKeys(login);
 		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("bad_password");
+		driver.findElement(By.id("password")).sendKeys(password);
 		driver.findElement(By.name("commit")).click();
 	}
 
-	public void typeTextIntoAField() {
-		driver.findElement(By.id("login")).clear();
-		driver.findElement(By.id("login")).sendKeys("admin");
-	}
 
 	@After
 	public void tearDown() throws Exception {
