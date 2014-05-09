@@ -28,24 +28,24 @@ public class incorrectLogin {
 		openLoginPage();
 
 		// when
-		provideIncorrectCredentialsAndCommit();
+		provideCredentialsAndCommit();
 
 		// then
-		assertThatYouDidNotLoggedIn();
+		assertThatYouLoggedInProperly();
 	}
 
-	public void assertThatYouDidNotLoggedIn() {
-		assertEquals("Forgot your password? Click here.", driver.findElement(By.id("forgot-password")).getText());
+	public void assertThatYouLoggedInProperly() {
+		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
 	}
 
 	public void openLoginPage() {
 		driver.get(baseUrl + "login");
 	}
 
-	public void provideIncorrectCredentialsAndCommit() {
+	public void provideCredentialsAndCommit() {
 		typeTextIntoAField();
 		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("bad_password");
+		driver.findElement(By.id("password")).sendKeys("password");
 		driver.findElement(By.name("commit")).click();
 	}
 
