@@ -17,15 +17,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 @RunWith(JUnitParamsRunner.class)
-public class IdeTest {
-	private WebDriver driver;
-	private StringBuffer verificationErrors = new StringBuffer();
-
-	@Before
-	public void setUp() throws Exception {
-		driver = new FirefoxDriver();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-	}
+public class IdeTest extends SeleniumHelper{
+//	private WebDriver driver;
+//	protected ThreadLocal<WebDriver> 
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		driver = new FirefoxDriver();
+//		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+//	}
 
 	@Test
 	public void shouldBePossibleToLoginWithCorrectAdminCredidentials()
@@ -57,12 +57,8 @@ public class IdeTest {
 		return $($("admin", "test"), $("admin", "dupa1224"), $("admin", ""));
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		driver.quit();
-		String verificationErrorString = verificationErrors.toString();
-		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
-		}
-	}
+//	@After
+//	public void tearDown() throws Exception {
+//		driver.quit();
+//	}
 }
