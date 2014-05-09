@@ -1,13 +1,13 @@
 package selenium;
 
+import static junitparams.JUnitParamsRunner.$;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
 
 import junitparams.JUnitParamsRunner;
-import static junitparams.JUnitParamsRunner.$;
-import junitparams.Parameters;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,20 +36,24 @@ public class IdeTest {
 
 	@Test
 	public void shouldBePossibleToLogin() throws Exception {
-		openLoginPage();
-		correctLoginWithAdminCredentials();
-		assertThatYouAreLogedIn();
+		//given
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.open();
+		//when
+		BacklogPage backlogPage = loginPage.loginWithCorrectAdminCredentials();
+		//then
+		assertTrue(backlogPage.isOpen());
 	}
 
-	@Test
-	//@Parameters({ "admin, dup1234", "admin1, password" })
-	@Parameters(method="loginValues")
-	public void shouldNotBePossibleToLoginWithWrongCredentials(String login,
-			String password) throws Exception {
-		openLoginPage();
-		incorrectLoginWithAdminCredentials(login, password);
-		assertThatYouAreNotLogedIn();
-	}
+//	@Test
+//	//@Parameters({ "admin, dup1234", "admin1, password" })
+//	@Parameters(method="loginValues")
+//	public void shouldNotBePossibleToLoginWithWrongCredentials(String login,
+//			String password) throws Exception {
+//		openLoginPage();
+//		incorrectLoginWithAdminCredentials(login, password);
+//		assertThatYouAreNotLogedIn();
+//	}
 
 	private void incorrectLoginWithAdminCredentials(String login,
 			String password) {
