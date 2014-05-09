@@ -1,29 +1,18 @@
 package selenium;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import org.junit.*;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
-import static junitparams.JUnitParamsRunner.$;
-
-@RunWith(JUnitParamsRunner.class)
-public class SimpleTest {
-
+public class BananaLogin {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -37,28 +26,15 @@ public class SimpleTest {
 	}
 
 	@Test
-	@Parameters(method = "allLoginTestScenarios")
-	public void shouldNotLoginAsAdminWithWrongCredentials(String admin, String password) throws Exception {
+	public void shouldLoginAsAdminWithAppropriateCredentials() throws Exception {
 		openLoginPage();
 
-		tryTologinWithInCorrectAdminCredentials(admin, password);
+		loginWithCorrectAdminCredentials();
 
-		assertThatLoginFailed();
-
-	}
-	
-	private Object[] allLoginTestScenarios(){
+		assertThatYouAreLoggedInAsAdmin();
 		
-		return $(
-                $("admin", "philFailed"),
-                $("Zoran", "password"),
-                $("", ""),
-                $("admin", "")
-                
-           );
 
 	}
-	
 
 	private void assertThatYouAreLoggedInAsAdmin() {
 		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
@@ -69,25 +45,32 @@ public class SimpleTest {
 		driver.get(baseUrl + "login");
 	}
 
-	private void tryTologinWithInCorrectAdminCredentials(String admin, String password) throws Exception {
-
-		typeTextIntoField(admin, By.id("login"));
-		typeTextIntoField(password, By.id("password"));
+	private void loginWithCorrectAdminCredentials() throws Exception {
+	
+		typeTextIntoField("admin", By.id("login"));
+		typeTextIntoField("admin", By.id("login"));
 		clickElement(By.name("commit"));
-	}
-
-	private void assertThatLoginFailed() {
-		String userMessage = driver.findElement(By.id("flash")).getText();
-		assertEquals(userMessage, "Login failed");
-
+		
+	
 	}
 	
-    private void logout() {
+	private void assertThatLoginFailed()
+	{
+		String userMessage = driver.findElement(By.id("flash")).getText();
+		assertEquals(userMessage, "Login failed");
+		
+		
+	}
+	
+   
+
+	private void logout() {
 		clickElement(By.linkText("Logout"));
 
 	}
 
 	private void typeTextIntoField(String Text, By locator) {
+		driver.get(baseUrl + "login");
 		driver.findElement(locator).clear();
 		driver.findElement(locator).sendKeys(Text);
 	}
