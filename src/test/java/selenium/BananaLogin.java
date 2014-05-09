@@ -3,15 +3,22 @@ package selenium;
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.*;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
+import org.junit.*;
+import org.junit.runner.RunWith;
+
+import static junitparams.JUnitParamsRunner.$;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+import static junitparams.JUnitParamsRunner.$;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
+@RunWith(JUnitParamsRunner.class)
 public class BananaLogin {
 	private WebDriver driver;
 	private String baseUrl;
@@ -26,58 +33,35 @@ public class BananaLogin {
 	}
 
 	@Test
-	public void shouldLoginAsAdminWithAppropriateCredentials() throws Exception {
-		openLoginPage();
+	@Parameters(method = "allLoginTestScenarios")
+	public void inCorrectLoginTest(String admin, String password) {
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.open();
 
-		loginWithCorrectAdminCredentials();
+		loginPage.inCorrectLogIn(admin, password);
 
-		assertThatYouAreLoggedInAsAdmin();
-		
+		assertTrue(loginPage.isOpen());
+	}
+
+	private Object[] allLoginTestScenarios() {
+
+		return $($("admin", "philFailed"), $("Zoran", "password"), $("", ""),
+				$("admin", "")
+
+		);
 
 	}
 
-	private void assertThatYouAreLoggedInAsAdmin() {
-		assertEquals("Admin", driver.findElement(By.id("admin")).getText());
+	@Test
+	public void pageObjectTest() {
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.open();
+
+		BacklogPage backlogPage = loginPage.correctLogIn();
+
+		assertTrue(backlogPage.isOpen());
 	}
 
-	private void openLoginPage() {
-
-		driver.get(baseUrl + "login");
-	}
-
-	private void loginWithCorrectAdminCredentials() throws Exception {
-	
-		typeTextIntoField("admin", By.id("login"));
-		typeTextIntoField("admin", By.id("login"));
-		clickElement(By.name("commit"));
-		
-	
-	}
-	
-	private void assertThatLoginFailed()
-	{
-		String userMessage = driver.findElement(By.id("flash")).getText();
-		assertEquals(userMessage, "Login failed");
-		
-		
-	}
-	
-   
-
-	private void logout() {
-		clickElement(By.linkText("Logout"));
-
-	}
-
-	private void typeTextIntoField(String Text, By locator) {
-		driver.get(baseUrl + "login");
-		driver.findElement(locator).clear();
-		driver.findElement(locator).sendKeys(Text);
-	}
-
-	private void clickElement(By locator) {
-		driver.findElement(locator).click();
-	}
 
 	@After
 	public void tearDown() throws Exception {

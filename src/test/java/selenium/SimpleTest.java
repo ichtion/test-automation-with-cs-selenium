@@ -44,6 +44,9 @@ public class SimpleTest {
 		tryTologinWithInCorrectAdminCredentials(admin, password);
 
 		assertThatLoginFailed();
+		
+		System.out.println();
+		
 
 	}
 	
