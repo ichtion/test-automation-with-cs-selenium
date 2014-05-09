@@ -34,9 +34,9 @@ public class loginIncorrectParameters {
 
 	@Test
 	@Parameters({
-		"wrongLogin, worngPassword",
-		"admin, worngPassword",
-		"wrongtLogin, password",
+		"wrongLogin, wrongPassword",
+		"admin, wrongPassword",
+		"wrongLogin, password",
 
 	})
 
