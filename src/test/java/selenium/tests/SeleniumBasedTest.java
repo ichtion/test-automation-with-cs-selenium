@@ -14,12 +14,9 @@ import static org.openqa.selenium.remote.DesiredCapabilities.*;
 public class SeleniumBasedTest {
 
     protected WebDriver driver;
-    protected ThreadLocal<WebDriver> threadLocalWebDriver = new ThreadLocal<WebDriver>();
 
     @Before
     public void setUp() throws Exception {
-//        WebDriver remoteWebDriver = new RemoteWebDriver(new URL("http://localhost:6666/wd/hub"), firefox());
-//        threadLocalWebDriver.set(remoteWebDriver);
         driver = new RemoteWebDriver(new URL("http://localhost:6666/wd/hub"), firefox());
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
